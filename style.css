@@ -7,58 +7,61 @@
 
 .grid-container .grid-cell { 
   border:8px solid;
+  float: left;
+}
+
+.grid-cell .tile {
   height: 184px;
   width: 184px;
-  float: left;
   font-size: 160px;
   font-weight: bold;
   text-align: center;
   color: #776e65;
 }
 
-.grid-cell.tile-2 {
+.tile.tile-2 {
   background: #eee4da;
 }
 
-.grid-cell.tile-4 {
+.tile.tile-4 {
   background: #ede0c8;
 }
 
-.grid-cell.tile-8 {
+.tile.tile-8 {
   background: #f2b179;
   color: #f9f6f2;
 }
 
-.grid-cell.tile-16 {
+.tile.tile-16 {
   color: #f9f6f2;
   background: #f59563;
 }
 
-.grid-cell.tile-32  {
+.tile.tile-32  {
   color: #f9f6f2;
   background: #f67c5f; }
 
-.grid-cell.tile-64  {
+.tile.tile-64  {
   color: #f9f6f2;
   background: #f65e3b; }
-.grid-cell.tile-128  {
+.tile.tile-128  {
   color: #f9f6f2;
   background: #edcf72;
  }
-.grid-cell.tile-256  {
+.tile.tile-256  {
   color: #f9f6f2;
   background: #edcc61;
    }
-.grid-cell.tile-512  {
+.tile.tile-512  {
   color: #f9f6f2;
   background: #edc850;
   }
-.grid-cell.tile-1024  {
+.tile.tile-1024  {
   color: #f9f6f2;
   background: #edc53f;
    }
 
-.grid-cell.tile-2048  {
+.tile.tile-2048  {
   color: #f9f6f2;
   background: #edc22e;
   }

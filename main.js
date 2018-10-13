@@ -36,11 +36,35 @@ function bindArrowControlls() {
 
     if (movementHappened) {
       addRandomTile();
-      $('.grid-cell').each((index, elem) => {
+      $('.tile').each((index, elem) => {
         $(elem).removeAttr('data-moved');
       })
     }
   })
+}
+
+function getTileValue(tile) {
+  if (!tile.text()) {
+    return 0;
+  }
+
+  return parseInt(tile.text());
+}
+
+
+function setTileValue(tile, value) {
+  tile
+    .hide()
+    .removeClass(`tile-${getTileValue(tile)}`)
+    .addClass(`tile-${value}`)
+    .text(value)
+    .fadeIn('fast');
+}
+
+function removeTile(tile) {
+  tile
+    .removeClass(`tile-${getTileValue(tile)}`)
+    .text('');
 }
 
 function moveDown() {
@@ -98,23 +122,39 @@ function moveRight() {
 };
 
 
-function moveTile(currentTile, nextTile) {
-  const currentValue = parseInt(currentTile.text());
-  const nextValue = parseInt(nextTile.text());
-  console.log(`Tile moved ${currentValue}-${nextValue}`);
+function moveLeft() {
+  let movementHappened = false;
+  for (i = 0; i < 4; i++) {
+    for (j = 3; j > 0; j--) {
+      const currentTile = gridArray[i][j];
+      const nextTile = gridArray[i][j - 1];
 
-  currentTile.removeClass(`tile-${currentTile.text()}`).text(0);
-  nextTile.hide();
-  nextTile.text(currentValue + nextValue).addClass(`tile-${currentValue + nextValue}`);
-  nextTile.fadeIn("fast");
+      if (canTileMove(currentTile, nextTile)) {
+        moveTile(currentTile, nextTile)
+        movementHappened = true;
+      }
+    }
+  }
+
+  return movementHappened;
+};
+
+
+function moveTile(currentTile, nextTile) {
+  const currentValue = getTileValue(currentTile);
+  const nextValue = getTileValue(nextTile);
+  console.log(`Tile moved ${currentValue} - ${nextValue}`);
+
+  removeTile(currentTile);
+  setTileValue(nextTile, currentValue + nextValue);
   if (nextValue > 0) {
     nextTile.attr('data-moved', 'true');
   }
 }
 
 function canTileMove(currentTile, nextTile) {
-  const currentValue = parseInt(currentTile.text());
-  const nextValue = parseInt(nextTile.text());
+  const currentValue = getTileValue(currentTile);
+  const nextValue = getTileValue(nextTile);
 
   if (currentTile.attr('data-moved') && nextValue > 0) {
     return false;
@@ -135,26 +175,12 @@ function canTileMove(currentTile, nextTile) {
   return false;
 }
 
-function initializeGrid() {
-  $('.grid-container').children('.grid-row').each(function (rowIndex, rowElement) {
-    gridArray[rowIndex] = [];
-    $(rowElement).children('.grid-cell').each(function (columnIndex, columnElement) {
-      gridArray[rowIndex].push($(columnElement));
-      $(columnElement).text(0);
-    });
-  });
-}
-
 function addRandomTile() {
   const randomTile = $(gridArray[getRandomInteger(3)][getRandomInteger(3)]);
-  if (randomTile.text() == 0) {
+  if (getTileValue(randomTile) === 0) {
     const tileValue = getRandomInteger(9) === 9 ? 4 : 2;
     console.log('new tile', tileValue);
-    randomTile
-      .hide()
-      .text(tileValue)
-      .addClass(`tile-${tileValue}`)
-      .slideDown("fast")
+    setTileValue(randomTile, tileValue);
   } else {
     addRandomTile();
   }
@@ -163,3 +189,14 @@ function addRandomTile() {
 function getRandomInteger(maxValue) {
   return Math.floor(Math.random() * (maxValue + 1));
 }
+
+function initializeGrid() {
+  $('.grid-container').children('.grid-row').each(function (rowIndex, rowElement) {
+    gridArray[rowIndex] = [];
+    $(rowElement).children('.grid-cell').children('.tile').each(function (columnIndex, columnElement) {
+      gridArray[rowIndex].push($(columnElement));
+    });
+  });
+}
+
+
