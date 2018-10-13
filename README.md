@@ -1,2 +1,2 @@
 # 2048
-Game idea inspired by https://github.com/gabrielecirulli/2048
+Game idea inspired by https://gabrielecirulli.github.io/2048/
