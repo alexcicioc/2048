@@ -216,20 +216,35 @@ function gridToNumericMatrix() {
 
 function saveGame() {
   const gridInJsonEncoded = window.btoa(JSON.stringify(gridToNumericMatrix()));
-  setCookie(PROGRESS_COOKIE_NAME, gridInJsonEncoded, 1)
-  console.log(document.cookie);
+  setCookie(PROGRESS_COOKIE_NAME, gridInJsonEncoded, 1);
+  alert('Game Saved !');
+}
+
+function resetGame() {
+  gridArray.forEach((row) => {
+    row.forEach((tile) => {
+      removeTile(tile);
+    });
+  });
+
+  addRandomTile();
+  addRandomTile();
+  console.log('Game reset');
 }
 
 function reloadLastGame() {
-  if (getCookie(PROGRESS_COOKIE_NAME)) {
-    console.log('Last game reloaded');
+  const savedGame = getCookie(PROGRESS_COOKIE_NAME);
+  if (savedGame) {
     try {
-      const savedGrid = window.atob(JSON.parse(document.cookie[PROGRESS_COOKIE_NAME]));
+      const savedGrid = JSON.parse(window.atob(savedGame));
       savedGrid.forEach((row, rowIndex) => {
         row.forEach((columnValue, columnIndex) => {
-          setTileValue(gridArray[rowIndex][columnIndex], columnValue);
+          if (columnValue) {
+            setTileValue(gridArray[rowIndex][columnIndex], columnValue);
+          }
         });
       });
+      console.log('Last game reloaded');
       return true;
     } catch (error) {
       console.error(error);
