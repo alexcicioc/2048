@@ -1,9 +1,12 @@
 const gridArray = [];
+const PROGRESS_COOKIE_NAME = 'gameProgress'
 
 $(document).ready(function () {
   initializeGrid();
-  addRandomTile();
-  addRandomTile();
+  if (!reloadLastGame()) {
+    addRandomTile();
+    addRandomTile();
+  }
   bindArrowControlls();
 });
 
@@ -199,4 +202,38 @@ function initializeGrid() {
   });
 }
 
+function gridToNumericMatrix() {
+  const numericGrid = [];
+  gridArray.forEach((row, rowIndex) => {
+    numericGrid[rowIndex] = [];
+    row.forEach((elem) => {
+      numericGrid[rowIndex].push(getTileValue(elem));
+    });
+  });
 
+  return numericGrid;
+}
+
+function saveGame() {
+  const gridInJsonEncoded = window.btoa(JSON.stringify(gridToNumericMatrix()));
+  setCookie(PROGRESS_COOKIE_NAME, gridInJsonEncoded, 1)
+  console.log(document.cookie);
+}
+
+function reloadLastGame() {
+  if (getCookie(PROGRESS_COOKIE_NAME)) {
+    console.log('Last game reloaded');
+    try {
+      const savedGrid = window.atob(JSON.parse(document.cookie[PROGRESS_COOKIE_NAME]));
+      savedGrid.forEach((row, rowIndex) => {
+        row.forEach((columnValue, columnIndex) => {
+          setTileValue(gridArray[rowIndex][columnIndex], columnValue);
+        });
+      });
+      return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  }
+}

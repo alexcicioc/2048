@@ -10,12 +10,18 @@
   float: left;
 }
 
+.grid-cell {
+  height: 184px;
+  width: 184px;
+}
+
 .grid-cell .tile {
   height: 184px;
   width: 184px;
   font-size: 160px;
   font-weight: bold;
   text-align: center;
+  vertical-align:middle;
   color: #776e65;
 }
 
@@ -39,29 +45,40 @@
 
 .tile.tile-32  {
   color: #f9f6f2;
-  background: #f67c5f; }
+  background: #f67c5f; 
+}
 
 .tile.tile-64  {
   color: #f9f6f2;
-  background: #f65e3b; }
+  background: #f65e3b; 
+}
+
 .tile.tile-128  {
   color: #f9f6f2;
   background: #edcf72;
+  font-size: 110px;
  }
+
 .tile.tile-256  {
   color: #f9f6f2;
   background: #edcc61;
-   }
+  font-size: 110px;
+}
+
 .tile.tile-512  {
   color: #f9f6f2;
   background: #edc850;
-  }
+  font-size: 110px;
+}
+
 .tile.tile-1024  {
   color: #f9f6f2;
   background: #edc53f;
-   }
+  font-size: 85px;
+}
 
 .tile.tile-2048  {
   color: #f9f6f2;
   background: #edc22e;
-  }
+  font-size: 85px;
+}
