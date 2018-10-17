@@ -25,6 +25,16 @@
   color: #776e65;
 }
 
+#score {
+  font-size: 30px;
+  text-align: center;
+}
+
+#score span {
+  font-weight: bold;
+  color: red;
+}
+
 #controlls {
   text-align: center;
   margin-top: 20px;
