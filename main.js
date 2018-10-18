@@ -1,4 +1,4 @@
-const grid = new Grid();
+const grid = new Grid(getTileArray());
 const movement = new Movement(grid);
 const PROGRESS_COOKIE_NAME = 'gameProgress'
 let score = 0;
@@ -8,6 +8,23 @@ if (!reloadLastGame()) {
   grid.addRandomTile();
 }
 bindArrowControlls();
+
+function getTileArray() {
+  const tiles = [];
+  $('.grid-container')
+    .children('.grid-row')
+    .each((x, rowElement) => {
+      tiles[x] = [];
+      $(rowElement)
+        .children('.grid-cell')
+        .children('.tile')
+        .each((y, tile) => {
+          tiles[x].push(tile);
+        });
+    });
+
+  return tiles;
+}
 
 function getDirectionFromKeyCode(keyCode) {
   switch (keyCode) {
@@ -29,12 +46,10 @@ function bindArrowControlls() {
 
     const direction = getDirectionFromKeyCode(event.keyCode);
     if (direction) {
-      movement.go(direction);
-
-      if (grid.didAnyTilesMove()) {
+      if (movement.go(direction)) {
         grid.addRandomTile();
       }
-      grid.finishRound();
+      grid.clearLocks();
     }
   });
 }
@@ -46,15 +61,8 @@ function saveGame() {
 }
 
 function resetGame() {
-  gridArray.forEach((row) => {
-    row.forEach((tile) => {
-      tile.remove();
-    });
-  });
   score = 0;
-  grid.addRandomTile();
-  grid.addRandomTile();
-  console.log('Game reset');
+  grid.reset();
 }
 
 function reloadLastGame() {
@@ -62,14 +70,7 @@ function reloadLastGame() {
   if (savedGame) {
     try {
       const savedGrid = JSON.parse(window.atob(savedGame));
-      savedGrid.forEach((row, rowIndex) => {
-        row.forEach((columnValue, columnIndex) => {
-          if (columnValue) {
-            const tile = gridArray[rowIndex][columnIndex];
-            tile.setValue(columnValue);
-          }
-        });
-      });
+      grid.reload(savedGrid)
       console.log('Last game reloaded');
       return true;
     } catch (error) {
